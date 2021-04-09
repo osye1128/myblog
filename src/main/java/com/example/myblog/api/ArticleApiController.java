@@ -2,8 +2,11 @@ package com.example.myblog.api;
 
 
 import com.example.myblog.dto.ArticleForm;
+import com.example.myblog.dto.CommentForm;
 import com.example.myblog.entity.Article;
+import com.example.myblog.entity.Comment;
 import com.example.myblog.repository.ArticleRepository;
+import com.example.myblog.repository.CommentRepository;
 import com.example.myblog.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ArticleApiController {
     @Autowired
-    private ArticleRepository articleRepository;
+    private  ArticleRepository articleRepository;
 
     private final ArticleService articleService;
+
+    private final CommentRepository commentRepository;
 
     @PostMapping("/api/articles") // Post 요청이 "/api/articles" url로 온다면, 메소드 수행!
     public Long create(@RequestBody ArticleForm form) { // JSON 데이터를 받아옴!
@@ -53,5 +58,7 @@ public class ArticleApiController {
     public Long destory(@PathVariable Long id){
         return articleService.destroy(id);
     }
+
+
 }
 

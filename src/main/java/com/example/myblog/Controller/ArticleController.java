@@ -2,7 +2,10 @@ package com.example.myblog.Controller;
 
 import com.example.myblog.dto.ArticleForm;
 import com.example.myblog.entity.Article;
+import com.example.myblog.entity.Comment;
 import com.example.myblog.repository.ArticleRepository;
+import com.example.myblog.repository.CommentRepository;
+import com.example.myblog.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -12,12 +15,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Iterator;
+import java.util.List;
 
 @Slf4j // 로깅(logging) 기능 추가! Lombok 플러그인 설치 필요!
 @RequiredArgsConstructor
 @Controller
 public class ArticleController {
     private final ArticleRepository articleRepository;
+    private final CommentService commentService;
+    private final CommentRepository commentRepository;
 
     @GetMapping("/articles")
         public String index(Model model){
@@ -38,8 +44,11 @@ public class ArticleController {
 
     @GetMapping("/articles/{id}")
     public String show(@PathVariable Long id,Model model){
+
         Article article = articleRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당 Article이 없습니다."));
+        log.info(article.toString());
         model.addAttribute("article",article);
+        model.addAttribute("comments",article.getComments());
         return "articles/show";
     }
 
